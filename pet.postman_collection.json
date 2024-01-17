@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "a8f9435f-cf50-4eb8-a940-82f17a7bdf50",
+		"name": "pet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29629835"
+	},
+	"item": [
+		{
+			"name": "Add pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData =pm.response.json();\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test('Name is present',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData).have.property(\"name\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const id = pm.variables.replaceIn('{{$randomInt}}');\r",
+							"const aniaml_name = pm.variables.replaceIn('{{$randomFirstName}}');\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"id\",id);\r",
+							"pm.collectionVariables.set(\"animal_name\",aniaml_name);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{id}},\r\n  \"category\": {\r\n    \"id\": {{id}},\r\n    \"name\": \"{{animal_name}}\"\r\n  },\r\n  \"name\": \"elephant\",\r\n  \"photoUrls\": [],\r\n  \"tags\": [],\r\n  \"status\": \"available\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Adress}}/pet",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/pet/{{id}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have proper values',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData.code).to.eql(200);\r",
+							"    pm.expect(jsonData.message).to.eql(pm.collectionVariables.get(\"id\"));\r",
+							"\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/pet/{{id}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							" \r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/pet/findByStatus?status=available",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "available"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "4"
+		},
+		{
+			"key": "animal_name",
+			"value": null
+		},
+		{
+			"key": "animal_type",
+			"value": null
+		},
+		{
+			"key": "status",
+			"value": null
+		},
+		{
+			"value": "",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
