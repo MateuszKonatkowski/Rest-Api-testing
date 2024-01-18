@@ -8,9 +8,9 @@ the project was to ensure thorough API testing, validate endpoints,
 and enhance the overall reliability and performance of the software
 ## ✳️ System Requirements 
 
-- Instal [Postman](https://www.postman.com)
-- Instal [Node.js](https://nodejs.org/en)
-- Instal [Newman](https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/)
+- Install [Postman](https://www.postman.com)
+- Install [Node.js](https://nodejs.org/en)
+- Install [Newman](https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/)
 
 ##  ✳️ Running Collection
 #### Install Newman
