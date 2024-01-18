@@ -1,0 +1,686 @@
+{
+	"info": {
+		"_postman_id": "a8f9435f-cf50-4eb8-a940-82f17a7bdf50",
+		"name": "Pet Store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29629835"
+	},
+	"item": [
+		{
+			"name": "Add pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData =pm.response.json();\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"         \r",
+							"});\r",
+							"\r",
+							"pm.test('Name is present',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData).have.property(\"name\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const id = pm.variables.replaceIn('{{$randomInt}}');\r",
+							"const aniaml_name = pm.variables.replaceIn('{{$randomFirstName}}');\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"id\",id);\r",
+							"pm.collectionVariables.set(\"animal_name\",aniaml_name);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{id}},\r\n  \"category\": {\r\n    \"id\": {{id}},\r\n    \"name\": \"{{animal_name}}\"\r\n  },\r\n  \"name\": \"elephant\",\r\n  \"photoUrls\": [],\r\n  \"tags\": [],\r\n  \"status\": \"available\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Adress}}/pet",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/pet/{{id}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have proper values',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData.code).to.eql(200);\r",
+							"    pm.expect(jsonData.message).to.eql(pm.collectionVariables.get(\"id\"));\r",
+							"\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/pet/{{id}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"pet",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"order_id\", _.random(1, 10))\r",
+							"pm.collectionVariables.set(\"pet_id\", _.random(1, 10))\r",
+							"pm.collectionVariables.set(\"pet_quantity\", _.random(1, 50))\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData =pm.response.json();\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"         \r",
+							"});\r",
+							"\r",
+							"pm.test('ShipDate is present',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData).have.property(\"shipDate\");\r",
+							"});\r",
+							"\r",
+							"pm.test('Complete have status true',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData.complete).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{order_id}},\r\n  \"petId\": {{pet_id}},\r\n  \"quantity\": {{pet_quantity}},\r\n  \"shipDate\": \"2024-01-18T15:59:45.134Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Adress}}/store/order",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"store",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/store/order/{{order_id}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"store",
+						"order",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of pets\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"         \r",
+							"});\r",
+							"\r",
+							"pm.test('Response should have proper values',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData.code).to.eql(200);\r",
+							"\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/store/order/{{order_id}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"store",
+						"order",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const firstname = pm.variables.replaceIn('{{$randomFirstName}}');\r",
+							"const lastname = pm.variables.replaceIn('{{$randomLastName}}');\r",
+							"const username = firstname + lastname;\r",
+							"const email = pm.variables.replaceIn('{{$randomEmail}}');\r",
+							"const password = pm.variables.replaceIn('{{$randomPassword}}');\r",
+							"const phone = pm.variables.replaceIn('{{$randomPhoneNumber}}')\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"user_id\", _.random(1, 100));\r",
+							"pm.collectionVariables.set(\"user_username\", username);\r",
+							"pm.collectionVariables.set(\"user_firstname\", firstname);\r",
+							"pm.collectionVariables.set(\"user_lastname\", lastname);\r",
+							"pm.collectionVariables.set(\"user_email\", email);\r",
+							"pm.collectionVariables.set(\"user_password\", password);\r",
+							"pm.collectionVariables.set(\"user_phone\", phone);\r",
+							"pm.collectionVariables.set(\"user_status\", _.random(1, 100))\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty message\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"         \r",
+							"});\r",
+							"\r",
+							"pm.test('Message is present',()=>\r",
+							"{\r",
+							"    pm.expect(jsonData).have.property(\"message\");\r",
+							"    \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": {{user_id}},\r\n  \"username\": \"{{user_username}}\",\r\n  \"firstName\": \"{{user_firstname}}\",\r\n  \"lastName\": \"{{user_lastname}}\",\r\n  \"email\": \"{{user_email}}\",\r\n  \"password\": \"{{user_password}}\",\r\n  \"phone\": \"{{user_phone}}\",\r\n  \"userStatus\": {{user_status}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Adress}}/user",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of user data\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/user/{{user_username}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"user",
+						"{{user_username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of user data\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/user/login?username={{user_username}}&password={{user_password}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"user",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{user_username}}"
+						},
+						{
+							"key": "password",
+							"value": "{{user_password}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of user data\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/user/logout",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test('Status is 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return non empty list of user data\", ()=> {\r",
+							"\t\t pm.expect(pm.response.json()).is.not.empty;\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test('Message is present',()=>\r",
+							"{\r",
+							"    pm.expect(response).have.property(\"message\");\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Adress}}/user/{{user_username}}",
+					"host": [
+						"{{Adress}}"
+					],
+					"path": [
+						"user",
+						"{{user_username}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "4"
+		},
+		{
+			"key": "animal_name",
+			"value": null
+		},
+		{
+			"key": "animal_type",
+			"value": null
+		},
+		{
+			"key": "status",
+			"value": null
+		},
+		{
+			"key": "order_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pet_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pet_quantity",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_firstname",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_lastname",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_email",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_phone",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_status",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
